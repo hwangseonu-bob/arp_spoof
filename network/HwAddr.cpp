@@ -8,6 +8,10 @@ HwAddr::HwAddr() {
     std::memset(addr, 0, size);
 }
 
+HwAddr::HwAddr(const HwAddr &mac) {
+    std::memcpy(addr, mac.addr, size);
+}
+
 HwAddr::HwAddr(byte *mac) {
     std::memcpy(addr, mac, size);
 }

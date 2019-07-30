@@ -15,6 +15,7 @@ namespace network {
         byte addr[size]{};
     public:
         HwAddr();
+        HwAddr(const HwAddr& mac);
         explicit HwAddr(byte mac[size]);
         explicit HwAddr(char *mac) noexcept(false);
         explicit HwAddr(const std::string &mac) noexcept(false);
