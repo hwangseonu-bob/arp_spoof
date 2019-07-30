@@ -1,12 +1,31 @@
-//
-// Created by hwangseonu on 19. 7. 31..
-//
+#ifndef ARP_SENDER_IPADDR_H
+#define ARP_SENDER_IPADDR_H
 
-#ifndef ARP_SENDER_IP_H
-#define ARP_SENDER_IP_H
+#include <cstdint>
+#include <string>
 
-class Ip {
+using byte=uint8_t;
 
-};
+namespace network {
+    class IpAddr {
+    public:
+        static const int size = 4;
+    protected:
+        byte addr[size] {};
+    public:
+        IpAddr();
+        IpAddr(const IpAddr &ip);
+        explicit IpAddr(const byte ip[size]);
+        explicit IpAddr(const char *ip) noexcept(false);
+        explicit IpAddr(const std::string &ip) noexcept(false);
+    public:
+        std::string to_string() const;
+        void parse_string(const std::string &ip) noexcept(false);
+    public:
+        IpAddr &operator=(const std::string &ip);
+    };
+}
 
-#endif //ARP_SENDER_IP_H
+std::ostream &operator<<(std::ostream &o, const network::IpAddr &addr);
+
+#endif //ARP_SENDER_IPADDR_H

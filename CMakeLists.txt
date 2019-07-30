@@ -3,4 +3,4 @@ project(arp_sender)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(arp_sender main.cpp network/HwAddr.cpp network/HwAddr.h)
+add_executable(arp_sender main.cpp network/HwAddr.cpp network/HwAddr.h network/IpAddr.cpp network/IpAddr.h)

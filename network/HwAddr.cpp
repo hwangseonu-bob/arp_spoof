@@ -4,19 +4,17 @@
 
 using namespace network;
 
-HwAddr::HwAddr() {
-    std::memset(addr, 0, size);
-}
+HwAddr::HwAddr() = default;
 
 HwAddr::HwAddr(const HwAddr &mac) {
     std::memcpy(addr, mac.addr, size);
 }
 
-HwAddr::HwAddr(byte *mac) {
+HwAddr::HwAddr(const byte *mac) {
     std::memcpy(addr, mac, size);
 }
 
-HwAddr::HwAddr(char *mac) noexcept(false) {
+HwAddr::HwAddr(const char *mac) noexcept(false) {
     parse_string(std::string(mac));
 }
 

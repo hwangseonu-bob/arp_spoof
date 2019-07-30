@@ -16,12 +16,12 @@ namespace network {
     public:
         HwAddr();
         HwAddr(const HwAddr& mac);
-        explicit HwAddr(byte mac[size]);
-        explicit HwAddr(char *mac) noexcept(false);
+        explicit HwAddr(const byte mac[size]);
+        explicit HwAddr(const char *mac) noexcept(false);
         explicit HwAddr(const std::string &mac) noexcept(false);
     public:
         std::string to_string() const;
-        void parse_string(const std::string &mac);
+        void parse_string(const std::string &mac) noexcept(false);
     public:
         HwAddr &operator=(const std::string &mac);
     };
