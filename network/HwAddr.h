@@ -14,7 +14,7 @@ namespace network {
     protected:
         byte addr[size]{};
     public:
-        HwAddr();
+        HwAddr() = default;
         HwAddr(const HwAddr& mac);
         explicit HwAddr(const byte mac[size]);
         explicit HwAddr(const char *mac) noexcept(false);

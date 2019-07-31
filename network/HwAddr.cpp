@@ -4,8 +4,6 @@
 
 using namespace network;
 
-HwAddr::HwAddr() = default;
-
 HwAddr::HwAddr(const HwAddr &mac) {
     std::memcpy(addr, mac.addr, size);
 }

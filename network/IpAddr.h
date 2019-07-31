@@ -13,7 +13,7 @@ namespace network {
     protected:
         byte addr[size] {};
     public:
-        IpAddr();
+        IpAddr() = default;
         IpAddr(const IpAddr &ip);
         explicit IpAddr(const byte ip[size]);
         explicit IpAddr(const char *ip) noexcept(false);

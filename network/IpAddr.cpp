@@ -4,8 +4,6 @@
 
 using namespace network;
 
-IpAddr::IpAddr() = default;
-
 IpAddr::IpAddr(const network::IpAddr &ip) {
     std::memcpy(addr, ip.addr, size);
 }
