@@ -10,7 +10,6 @@ namespace network {
     class IpAddr {
     public:
         static const int size = 4;
-    protected:
         byte addr[size] {};
     public:
         IpAddr() = default;

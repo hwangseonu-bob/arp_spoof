@@ -1,3 +1,4 @@
+#include <cstring>
 #include "Arp.h"
 
 using namespace network;
@@ -25,4 +26,21 @@ Arp::Arp(u_short ht, u_short pt, byte hs, byte ps, u_short oc,
     sender_ip = sip;
     target_mac = tmac;
     target_ip = tip;
+}
+
+byte *Arp::to_bytes() const {
+    byte *bytes = reinterpret_cast<byte *>(malloc(sizeof(Arp)));
+    bytes[0] = byte(hw_type & 0xF0 >> 8);
+    bytes[1] = byte(hw_type & 0x0F);
+    bytes[2] = byte(protocol_type & 0xF0 >> 8);
+    bytes[3] = byte(protocol_type & 0x0F);
+    bytes[4] = hw_size;
+    bytes[5] = protocol_size;
+    bytes[6] = byte(opcode & 0xF0 >> 8);
+    bytes[7] = byte(opcode & 0x0F);
+    std::memcpy(bytes + 8, sender_mac.addr, HwAddr::size);
+    std::memcpy(bytes + 14, sender_ip.addr, IpAddr::size);
+    std::memcpy(bytes + 18, target_mac.addr, HwAddr::size);
+    std::memcpy(bytes + 24, target_ip.addr, IpAddr::size);
+    return bytes;
 }

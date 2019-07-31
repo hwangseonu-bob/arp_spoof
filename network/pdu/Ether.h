@@ -18,6 +18,8 @@ namespace network {
         Ether() = default;
         explicit Ether(const byte pk[size]);
         explicit Ether(const HwAddr& dst, const HwAddr& src, u_short type);
+    public:
+        byte* to_bytes() const;
     };
 }
 

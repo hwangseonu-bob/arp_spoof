@@ -28,6 +28,9 @@ namespace network {
                 u_short tl, u_short id, u_short flags,
                 byte ttl, byte proto, u_short chksum,
                 const IpAddr& src, const IpAddr& dst);
+    public:
+        uint header_length() const;
+        byte* to_bytes() const;
     };
 }
 

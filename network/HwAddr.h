@@ -11,7 +11,6 @@ namespace network {
     class HwAddr {
     public:
         static const int size = 6;
-    protected:
         byte addr[size]{};
     public:
         HwAddr() = default;

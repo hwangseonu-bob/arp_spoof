@@ -25,6 +25,8 @@ namespace network {
         explicit Arp(const byte arp[]);
         explicit Arp(u_short ht, u_short pt, byte hs, byte ps, u_short oc,
                 const HwAddr& smac, const IpAddr& sip, const HwAddr& tmac, const IpAddr& tip);
+    public:
+        byte* to_bytes() const;
     };
 }
 
