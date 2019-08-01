@@ -1,4 +1,5 @@
 #include <cstring>
+#include <net/if_arp.h>
 #include "Arp.h"
 
 using namespace network;
@@ -15,6 +16,18 @@ Arp::Arp(const byte *arp) {
     target_ip = IpAddr(arp + 24);
 }
 
+Arp::Arp(u_short oc, const HwAddr &smac, const IpAddr &sip, const HwAddr &tmac, const IpAddr &tip) {
+    hw_type = 0x0001;
+    protocol_type = 0x0800;
+    hw_size = HwAddr::size;
+    protocol_size = IpAddr::size;
+    opcode = oc;
+    sender_mac = smac;
+    sender_ip = sip;
+    target_mac = tmac;
+    target_ip = tip;
+}
+
 Arp::Arp(u_short ht, u_short pt, byte hs, byte ps, u_short oc,
         const HwAddr &smac, const IpAddr &sip, const HwAddr &tmac, const IpAddr &tip) {
     hw_type = ht;
@@ -29,18 +42,19 @@ Arp::Arp(u_short ht, u_short pt, byte hs, byte ps, u_short oc,
 }
 
 byte *Arp::to_bytes() const {
-    byte *bytes = reinterpret_cast<byte *>(malloc(sizeof(Arp)));
-    bytes[0] = byte(hw_type & 0xF0 >> 8);
-    bytes[1] = byte(hw_type & 0x0F);
-    bytes[2] = byte(protocol_type & 0xF0 >> 8);
-    bytes[3] = byte(protocol_type & 0x0F);
+    byte *bytes = new byte[size];
+    bytes[0] = byte((hw_type & 0xFF00) >> 8);
+    bytes[1] = byte(hw_type & 0x00FF);
+    bytes[2] = byte((protocol_type & 0xFF00) >> 8);
+    bytes[3] = byte(protocol_type & 0x00FF);
     bytes[4] = hw_size;
     bytes[5] = protocol_size;
-    bytes[6] = byte(opcode & 0xF0 >> 8);
-    bytes[7] = byte(opcode & 0x0F);
+    bytes[6] = byte((opcode & 0xFF00) >> 8);
+    bytes[7] = byte(opcode & 0x00FF);
     std::memcpy(bytes + 8, sender_mac.addr, HwAddr::size);
     std::memcpy(bytes + 14, sender_ip.addr, IpAddr::size);
     std::memcpy(bytes + 18, target_mac.addr, HwAddr::size);
     std::memcpy(bytes + 24, target_ip.addr, IpAddr::size);
     return bytes;
 }
+

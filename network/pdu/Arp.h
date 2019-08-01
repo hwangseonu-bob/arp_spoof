@@ -6,10 +6,11 @@
 #include "../IpAddr.h"
 
 using byte=uint8_t;
-using u_short=uint16_t;
 
 namespace network {
     class Arp {
+    public:
+        static const int size = 28;
     public:
         u_short hw_type;
         u_short protocol_type;
@@ -23,6 +24,7 @@ namespace network {
     public:
         Arp() = default;
         explicit Arp(const byte arp[]);
+        explicit Arp(u_short oc, const HwAddr& smac, const IpAddr& sip, const HwAddr& tmac, const IpAddr& tip);
         explicit Arp(u_short ht, u_short pt, byte hs, byte ps, u_short oc,
                 const HwAddr& smac, const IpAddr& sip, const HwAddr& tmac, const IpAddr& tip);
     public:

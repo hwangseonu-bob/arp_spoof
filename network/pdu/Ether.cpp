@@ -16,10 +16,10 @@ Ether::Ether(const HwAddr &dst, const HwAddr &src, u_short type) {
 }
 
 byte *Ether::to_bytes() const {
-    byte *bytes = reinterpret_cast<byte *>(malloc(Ether::size));
+    byte* bytes = new byte[size];
     std::memcpy(bytes, dst.addr, HwAddr::size);
     std::memcpy(bytes + HwAddr::size, src.addr, HwAddr::size);
-    bytes[HwAddr::size * 2] = byte(type & 0xF0 >> 8);
-    bytes[HwAddr::size * 2 + 1] = byte(type & 0x0F);
+    bytes[HwAddr::size * 2] = byte((type & 0xFF00) >> 8);
+    bytes[HwAddr::size * 2 + 1] = byte(type & 0x00FF);
     return bytes;
 }
