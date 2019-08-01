@@ -1,5 +1,7 @@
 #include <cstring>
+#include <iostream>
 #include <regex>
+
 #include "IpAddr.h"
 
 using namespace network;
@@ -10,6 +12,11 @@ IpAddr::IpAddr(const network::IpAddr &ip) {
 
 IpAddr::IpAddr(const byte *ip) {
     std::memcpy(addr, ip, size);
+}
+
+IpAddr::IpAddr(uint32_t ip) {
+    byte *bytes = reinterpret_cast<byte*>(&ip);
+    std::memcpy(addr, bytes, size);
 }
 
 IpAddr::IpAddr(const char *ip) {
@@ -24,16 +31,9 @@ void IpAddr::parse_string(const std::string &ip) noexcept(false) {
     std::regex reg(
             "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$");
 
-    std::string str(ip);
-    int i = 0;
+    std::string format = "%d.%d.%d.%d";
     if (std::regex_match(ip, reg)) {
-        size_t pos = 0;
-        std::string token;
-        while ((pos = str.find('.')) != std::string::npos) {
-            addr[i++] = std::stoi(str.substr(0, pos));
-            str.erase(0, pos + 1);
-        }
-        addr[i] = std::stoi(str);
+        std::sscanf(ip.c_str(), format.c_str(), addr, addr+1, addr+2, addr+3);
     } else {
         throw std::invalid_argument("invalid arguments : " + ip + " is not an ip address");
     }

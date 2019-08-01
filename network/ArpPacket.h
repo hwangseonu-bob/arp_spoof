@@ -3,10 +3,10 @@
 
 #include <cstdint>
 
-using byte=uint8_t;
-
 #include "pdu/Ether.h"
 #include "pdu/Arp.h"
+
+using byte=uint8_t;
 
 namespace network {
     class ArpPacket {

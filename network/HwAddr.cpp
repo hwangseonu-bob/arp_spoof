@@ -1,5 +1,6 @@
 #include <cstring>
 #include <regex>
+
 #include "HwAddr.h"
 
 using namespace network;
@@ -22,16 +23,14 @@ HwAddr::HwAddr(const std::string &mac) noexcept(false) {
 
 void HwAddr::parse_string(const std::string &mac) noexcept(false) {
     std::regex reg("^(([0-9A-Fa-f]{2})[:-]){5}([0-9A-Fa-f]{2})$");
-    int l = 12, inc = 2;
+    std::string format = "%02x%02x%02x%02x%02x%02x";
     if (std::regex_match(mac, reg)) {
-        l = 18;
-        inc = 3;
+        if (mac.find(':') != std::string::npos)
+            format = "%02x:%02x:%02x:%02x:%02x:%02x";
+        if (mac.find('-') != std::string::npos)
+            format = "%02x-%02x-%02x-%02x-%02x-%02x";
     }
-
-    int index = 0;
-    for (int i = 0; i < l; i += inc) {
-        addr[index++] = std::stoi(mac.substr(i, 2), nullptr, 16);
-    }
+    std::sscanf(mac.c_str(), format.c_str(), addr, addr+1, addr+2, addr+3, addr+4, addr+5);
 }
 
 std::string HwAddr::to_string() const {
