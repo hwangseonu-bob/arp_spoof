@@ -33,8 +33,32 @@ HwAddr get_dev_mac(const char *dev) {
     return HwAddr(mac);
 }
 
+HwAddr get_target_mac(pcap* desc, const HwAddr& smac, const IpAddr& sip, const IpAddr& tip) {
+    ArpPacket arp(ARPOP_REQUEST,
+                  smac, sip,
+                  HwAddr(), tip);
+    arp.ether.dst = HwAddr("FF:FF:FF:FF:FF:FF");
+    const byte *packet = arp.to_bytes();
+    if (pcap_sendpacket(desc, packet, ArpPacket::size) != 0) {
+        cerr << "Error sending the packet : " << pcap_geterr(desc) << endl;
+        exit(-1);
+    }
+
+    pcap_pkthdr *header;
+    int res = 0;
+    while ((res = pcap_next_ex(desc, &header, &packet)) >= 0) {
+        if (res == 0) continue;
+        arp = ArpPacket(packet);
+        if (arp.arp.opcode == ARPOP_REPLY and arp.arp.sender_ip == tip) {
+            return arp.arp.sender_mac;
+        }
+    }
+    return HwAddr("FF:FF:FF:FF:FF:FF");
+}
+
 int main(int argc, char *argv[]) {
     pcap_t *desc = nullptr;
+    auto filter = new bpf_program;
     char errbuf[PCAP_ERRBUF_SIZE] = {};
     char *dev = argv[1];
 
@@ -43,21 +67,32 @@ int main(int argc, char *argv[]) {
     cout << "open device " << dev << endl;
 
     if ((desc = pcap_open_live(dev, MAX_BYTES, 0, 512, errbuf)) == nullptr) {
-        cout << "error: "  << errbuf << endl;
+        cerr << "error: "  << errbuf << endl;
         return -1;
     }
 
-    ArpPacket arp(ARPOP_REPLY,
-            get_dev_mac(dev), IpAddr(argv[2]),
-            HwAddr("BB:BB:BB:BB:BB:BB"), IpAddr(argv[3]));
+    if (pcap_compile(desc, filter, "arp", 1, 0) == -1 and pcap_setfilter(desc, filter) == -1) {
+        cerr << "error: "  << pcap_geterr(desc) << endl;
+        return -1;
+    }
+
+    IpAddr sip = IpAddr(argv[2]);
+    IpAddr tip = IpAddr(argv[3]);
+    HwAddr sender_mac = get_dev_mac(dev);
+    HwAddr target_mac = get_target_mac(desc, sender_mac, sip, tip);
+
+    ArpPacket arp = ArpPacket(ARPOP_REPLY,
+            sender_mac, sip,
+            target_mac, tip);
     byte *packet = arp.to_bytes();
 
     if (pcap_sendpacket(desc, packet, ArpPacket::size) != 0) {
-        fprintf(stderr, "\nError sending the packet : %s\n", pcap_geterr(desc));
-        exit(EXIT_FAILURE);
+        cerr << "Error sending the packet : " << pcap_geterr(desc) << endl;
+        return -1;
     }
 
     free(packet);
     pcap_close(desc);
+    delete(filter);
     return 0;
 }

@@ -1,5 +1,6 @@
 #include <cstring>
 #include <net/if_arp.h>
+#include <iostream>
 #include "Arp.h"
 
 using namespace network;
@@ -10,6 +11,7 @@ Arp::Arp(const byte *arp) {
     hw_size = arp[4];
     protocol_size = arp[5];
     opcode = arp[6] << 8 | arp[7];
+
     sender_mac = HwAddr(arp + 8);
     sender_ip = IpAddr(arp + 14);
     target_mac = HwAddr(arp + 18);

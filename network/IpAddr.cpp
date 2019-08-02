@@ -51,6 +51,13 @@ IpAddr &IpAddr::operator=(const std::string &ip) {
     return *this;
 }
 
+bool IpAddr::operator==(const IpAddr &ip) {
+    if (addr[0] != ip.addr[0]) return false;
+    if (addr[1] != ip.addr[1]) return false;
+    if (addr[2] != ip.addr[2]) return false;
+    return addr[3] == ip.addr[3];
+}
+
 std::ostream &operator<<(std::ostream &o, const IpAddr &addr) {
     o << addr.to_string();
     return o;

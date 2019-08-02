@@ -22,6 +22,7 @@ namespace network {
         std::string to_string() const;
         void parse_string(const std::string &ip) noexcept(false);
     public:
+        bool operator==(const IpAddr &ip);
         IpAddr &operator=(const std::string &ip);
     };
 }

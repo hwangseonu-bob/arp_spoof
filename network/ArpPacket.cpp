@@ -1,5 +1,6 @@
 #include <cstring>
 #include <netinet/if_ether.h>
+#include <iostream>
 
 #include "ArpPacket.h"
 
@@ -18,6 +19,12 @@ byte *ArpPacket::to_bytes() const {
     return bytes;
 }
 
+ArpPacket::ArpPacket(const byte *bytes) {
+    ether = Ether(bytes);
+    arp = Arp(bytes + Ether::size);
+}
+
+
 ArpPacket::ArpPacket(u_short opcode, const std::string &sender_mac, const std::string &sender_ip,
                      const std::string &target_mac, const std::string &target_ip) {
     ether = Ether(HwAddr(target_mac), HwAddr(sender_mac), ETHERTYPE_ARP);
@@ -28,6 +35,5 @@ ArpPacket::ArpPacket(u_short opcode, const std::string &sender_mac, const std::s
 ArpPacket::ArpPacket(u_short opcode, const HwAddr &sender_mac, const IpAddr &sender_ip,
                      const HwAddr &target_mac, const IpAddr &target_ip) {
     ether = Ether(target_mac, sender_mac, ETHERTYPE_ARP);
-
     arp = Arp(opcode, sender_mac, sender_ip, target_mac, target_ip);
 }
