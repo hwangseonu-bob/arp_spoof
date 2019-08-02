@@ -1,6 +1,5 @@
 #include <cstring>
 #include <netinet/if_ether.h>
-#include <iostream>
 
 #include "ArpPacket.h"
 
