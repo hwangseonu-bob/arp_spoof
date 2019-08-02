@@ -13,9 +13,9 @@ namespace network {
         static const int size = 28;
     public:
         u_short hw_type;
-        u_short protocol_type;
+        u_short pt_type;
         byte hw_size;
-        byte protocol_size;
+        byte pt_size;
         u_short opcode;
         HwAddr sender_mac;
         IpAddr sender_ip;

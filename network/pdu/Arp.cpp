@@ -1,16 +1,26 @@
 #include <cstring>
 #include <net/if_arp.h>
 #include <iostream>
+#include <netinet/in.h>
 #include "Arp.h"
 
 using namespace network;
 
+struct arp_header {
+    uint16_t hw_type;
+    uint16_t pt_type;
+    uint8_t hw_size;
+    uint8_t pt_size;
+    uint16_t opcode;
+};
+
 Arp::Arp(const byte *arp) {
-    hw_type = arp[0] << 8 | arp[1];
-    protocol_type = arp[2] << 8 | arp[3];
-    hw_size = arp[4];
-    protocol_size = arp[5];
-    opcode = arp[6] << 8 | arp[7];
+    auto *hd = reinterpret_cast<const arp_header *>(arp);
+    hw_type = ntohs(hd->hw_type);
+    pt_type = ntohs(hd->pt_type);
+    hw_size = hd->hw_size;
+    pt_size = hd->pt_size;
+    opcode = ntohs(hd->opcode);
 
     sender_mac = HwAddr(arp + 8);
     sender_ip = IpAddr(arp + 14);
@@ -20,9 +30,9 @@ Arp::Arp(const byte *arp) {
 
 Arp::Arp(u_short oc, const HwAddr &smac, const IpAddr &sip, const HwAddr &tmac, const IpAddr &tip) {
     hw_type = 0x0001;
-    protocol_type = 0x0800;
+    pt_type = 0x0800;
     hw_size = HwAddr::size;
-    protocol_size = IpAddr::size;
+    pt_size = IpAddr::size;
     opcode = oc;
     sender_mac = smac;
     sender_ip = sip;
@@ -31,11 +41,11 @@ Arp::Arp(u_short oc, const HwAddr &smac, const IpAddr &sip, const HwAddr &tmac, 
 }
 
 Arp::Arp(u_short ht, u_short pt, byte hs, byte ps, u_short oc,
-        const HwAddr &smac, const IpAddr &sip, const HwAddr &tmac, const IpAddr &tip) {
+         const HwAddr &smac, const IpAddr &sip, const HwAddr &tmac, const IpAddr &tip) {
     hw_type = ht;
-    protocol_type = pt;
+    pt_type = pt;
     hw_size = hs;
-    protocol_size = ps;
+    pt_size = ps;
     opcode = oc;
     sender_mac = smac;
     sender_ip = sip;
@@ -45,18 +55,18 @@ Arp::Arp(u_short ht, u_short pt, byte hs, byte ps, u_short oc,
 
 byte *Arp::to_bytes() const {
     byte *bytes = new byte[size];
-    bytes[0] = byte((hw_type & 0xFF00) >> 8);
-    bytes[1] = byte(hw_type & 0x00FF);
-    bytes[2] = byte((protocol_type & 0xFF00) >> 8);
-    bytes[3] = byte(protocol_type & 0x00FF);
-    bytes[4] = hw_size;
-    bytes[5] = protocol_size;
-    bytes[6] = byte((opcode & 0xFF00) >> 8);
-    bytes[7] = byte(opcode & 0x00FF);
+    auto *hd = new arp_header;
+    hd->hw_type = htons(hw_type);
+    hd->pt_type = htons(pt_type);
+    hd->hw_size = hw_size;
+    hd->pt_size = pt_size;
+    hd->opcode = htons(opcode);
+    std::memcpy(bytes, hd, sizeof(arp_header));
     std::memcpy(bytes + 8, sender_mac.addr, HwAddr::size);
     std::memcpy(bytes + 14, sender_ip.addr, IpAddr::size);
     std::memcpy(bytes + 18, target_mac.addr, HwAddr::size);
     std::memcpy(bytes + 24, target_ip.addr, IpAddr::size);
+    delete(hd);
     return bytes;
 }
 
