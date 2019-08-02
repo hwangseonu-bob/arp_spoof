@@ -23,6 +23,9 @@ namespace network {
         explicit ArpPacket(u_short opcode, const HwAddr &sender_mac, const IpAddr &sender_ip, const HwAddr &target_mac,
                            const IpAddr &target_ip);
     public:
+        explicit operator byte*() const {
+            return to_bytes();
+        }
         byte *to_bytes() const;
     };
 }

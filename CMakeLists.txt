@@ -1,6 +1,9 @@
 cmake_minimum_required(VERSION 3.14)
 project(arp_sender)
 
+set(dir ${CMAKE_CURRENT_SOURCE_DIR}/../../bin)
+set(EXECUTABLE_OUTPUT_PATH ${dir})
+
 set(CMAKE_CXX_STANDARD 14)
 include(FindPCAP.cmake)
 
