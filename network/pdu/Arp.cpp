@@ -1,5 +1,4 @@
 #include <cstring>
-#include <net/if_arp.h>
 #include <iostream>
 #include <netinet/in.h>
 #include "Arp.h"
@@ -66,7 +65,7 @@ byte *Arp::to_bytes() const {
     std::memcpy(bytes + 14, sender_ip.addr, IpAddr::size);
     std::memcpy(bytes + 18, target_mac.addr, HwAddr::size);
     std::memcpy(bytes + 24, target_ip.addr, IpAddr::size);
-    delete(hd);
+    delete (hd);
     return bytes;
 }
 
