@@ -17,6 +17,7 @@ namespace network {
 
     public:
         ArpPacket() = default;
+        ArpPacket(const ArpPacket& pk) = default;
         explicit ArpPacket(const byte bytes[size]);
         explicit ArpPacket(u_short opcode, const std::string &sender_mac, const std::string &sender_ip,
                            const std::string &target_mac, const std::string &target_ip);

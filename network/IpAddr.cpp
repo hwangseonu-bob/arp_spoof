@@ -6,10 +6,6 @@
 
 using namespace network;
 
-IpAddr::IpAddr(const network::IpAddr &ip) {
-    std::memcpy(addr, ip.addr, size);
-}
-
 IpAddr::IpAddr(const byte *ip) {
     std::memcpy(addr, ip, size);
 }

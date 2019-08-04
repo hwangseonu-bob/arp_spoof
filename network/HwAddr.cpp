@@ -5,10 +5,6 @@
 
 using namespace network;
 
-HwAddr::HwAddr(const HwAddr &mac) {
-    std::memcpy(addr, mac.addr, size);
-}
-
 HwAddr::HwAddr(const byte *mac) {
     std::memcpy(addr, mac, size);
 }
