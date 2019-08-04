@@ -68,7 +68,7 @@ HwAddr get_target_mac(const char *dev, const IpAddr &tip) {
     ArpPacket arp(ARPOP_REQUEST,
                   smac, sip,
                   HwAddr(), tip);
-    arp.ether.dst = HwAddr("FF:FF:FF:FF:FF:FF");
+    arp.ether.dst = broadcast_mac;
     const byte *packet = (byte *) arp;
     if (pcap_sendpacket(desc, packet, ArpPacket::size) != 0) {
         cerr << "Error sending the packet : " << pcap_geterr(desc) << endl;
@@ -91,7 +91,7 @@ HwAddr get_target_mac(const char *dev, const IpAddr &tip) {
         }
     }
     delete (filter);
-    return HwAddr("FF:FF:FF:FF:FF:FF");
+    return broadcast_mac;
 }
 
 void arp_spoof(const char *dev, const string &sender, const string &target) {

@@ -10,7 +10,7 @@ using byte=uint8_t;
 namespace network {
     class HwAddr {
     public:
-        static const int size = 6;
+        static const int size{6};
         byte addr[size]{};
     public:
         HwAddr() = default;
@@ -24,6 +24,7 @@ namespace network {
         HwAddr &operator=(const std::string &mac);
     };
 
+    static const HwAddr& broadcast_mac = HwAddr("FF:FF:FF:FF:FF:FF");
 }
 std::ostream &operator<<(std::ostream &o, const network::HwAddr &addr);
 
