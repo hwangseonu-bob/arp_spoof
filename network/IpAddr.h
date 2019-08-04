@@ -16,7 +16,6 @@ namespace network {
         IpAddr(const IpAddr &ip) = default;
         explicit IpAddr(const byte ip[size]);
         explicit IpAddr(uint32_t ip);
-        explicit IpAddr(const char *ip) noexcept(false);
         explicit IpAddr(const std::string &ip) noexcept(false);
     public:
         std::string to_string() const;

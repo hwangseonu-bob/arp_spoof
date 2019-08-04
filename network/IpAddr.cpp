@@ -15,10 +15,6 @@ IpAddr::IpAddr(uint32_t ip) {
     std::memcpy(addr, bytes, size);
 }
 
-IpAddr::IpAddr(const char *ip) {
-    parse_string(std::string(ip));
-}
-
 IpAddr::IpAddr(const std::string &ip) {
     parse_string(ip);
 }

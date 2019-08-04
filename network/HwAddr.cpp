@@ -8,11 +8,6 @@ using namespace network;
 HwAddr::HwAddr(const byte *mac) {
     std::memcpy(addr, mac, size);
 }
-
-HwAddr::HwAddr(const char *mac) noexcept(false) {
-    parse_string(std::string(mac));
-}
-
 HwAddr::HwAddr(const std::string &mac) noexcept(false) {
     parse_string(mac);
 }
