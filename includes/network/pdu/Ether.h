@@ -1,9 +1,8 @@
-#ifndef ARP_SENDER_ETHER_H
-#define ARP_SENDER_ETHER_H
+#pragma once
 
 #include <cstdint>
 #include <ostream>
-#include "../HwAddr.h"
+#include "network/HwAddr.h"
 
 using byte=uint8_t;
 
@@ -23,5 +22,3 @@ namespace network {
         byte* to_bytes() const;
     };
 }
-
-#endif //ARP_SENDER_ETHER_H

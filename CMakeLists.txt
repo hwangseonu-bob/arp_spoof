@@ -7,12 +7,21 @@ include(FindPCAP.cmake)
 
 set(SOURCE_LIST
         src/main.cpp
+
+        src/network/ArpPacket.cpp
         src/network/HwAddr.cpp
         src/network/IpAddr.cpp
-        src/network/pdu/Ether.cpp
-        src/network/pdu/Arp.cpp
-        src/network/ArpPacket.cpp
         src/network/utils.cpp
+        includes/network/pdu/Arp.h
+        includes/network/pdu/Ether.h
+
+        src/network/ArpPacket.cpp
+        src/network/HwAddr.cpp
+        src/network/IpAddr.cpp
+        src/network/utils.cpp
+        src/network/pdu/Arp.cpp
+        src/network/pdu/Ether.cpp
         )
+
 add_executable(arp_spoof ${SOURCE_LIST})
 target_link_libraries(arp_spoof ${PCAP_LIBRARY})

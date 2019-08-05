@@ -1,5 +1,4 @@
-#ifndef ARP_SENDER_IPADDR_H
-#define ARP_SENDER_IPADDR_H
+#pragma once
 
 #include <cstdint>
 #include <string>
@@ -26,6 +25,7 @@ namespace network {
     };
 }
 
-std::ostream &operator<<(std::ostream &o, const network::IpAddr &addr);
-
-#endif //ARP_SENDER_IPADDR_H
+std::ostream &operator<<(std::ostream &o, const network::IpAddr &addr) {
+    o << addr.to_string();
+    return o;
+}
