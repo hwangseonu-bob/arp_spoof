@@ -1,5 +1,4 @@
-#ifndef ARP_SENDER_HWADDR_H
-#define ARP_SENDER_HWADDR_H
+#pragma once
 
 #include <cstdint>
 #include <ostream>
@@ -26,6 +25,8 @@ namespace network {
 
     static const HwAddr& broadcast_mac = HwAddr("FF:FF:FF:FF:FF:FF");
 }
-std::ostream &operator<<(std::ostream &o, const network::HwAddr &addr);
 
-#endif //ARP_SENDER_HWADDR_H
+std::ostream &operator<<(std::ostream &o, const network::HwAddr &addr) {
+    o << addr.to_string();
+    return o;
+}
