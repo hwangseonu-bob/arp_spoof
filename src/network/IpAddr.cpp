@@ -49,3 +49,8 @@ namespace network {
         return addr[3] == ip.addr[3];
     }
 }
+
+std::ostream &operator<<(std::ostream &o, const network::IpAddr &addr) {
+    o << addr.to_string();
+    return o;
+}
