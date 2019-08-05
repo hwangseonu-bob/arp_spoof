@@ -16,5 +16,3 @@ set(SOURCE_LIST
         )
 add_executable(arp_spoof ${SOURCE_LIST})
 target_link_libraries(arp_spoof ${PCAP_LIBRARY})
-
-#add_executable(arp_spoof src/main.cpp network/HwAddr.cpp network/HwAddr.h network/IpAddr.cpp network/IpAddr.h network/pdu/Ether.cpp network/pdu/Ether.h network/pdu/Arp.cpp network/pdu/Arp.h network/ArpPacket.cpp network/ArpPacket.h network/utils.cpp network/utils.h)
