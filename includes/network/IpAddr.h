@@ -25,7 +25,4 @@ namespace network {
     };
 }
 
-std::ostream &operator<<(std::ostream &o, const network::IpAddr &addr) {
-    o << addr.to_string();
-    return o;
-}
+std::ostream &operator<<(std::ostream &o, const network::IpAddr &addr);

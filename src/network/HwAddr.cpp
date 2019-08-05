@@ -36,3 +36,8 @@ namespace network {
         return *this;
     }
 }
+
+std::ostream &operator<<(std::ostream &o, const network::HwAddr &addr) {
+    o << addr.to_string();
+    return o;
+}
