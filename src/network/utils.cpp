@@ -1,15 +1,15 @@
 #include <cstring>
 #include <iostream>
 #include <net/if.h>
+#include <net/if_arp.h>
 #include <netinet/in.h>
 #include <stdexcept>
 #include <sys/socket.h>
 #include <sys/ioctl.h>
 #include <unistd.h>
-#include <net/if_arp.h>
 
-#include "utils.h"
-#include "ArpPacket.h"
+#include "network/ArpPacket.h"
+#include "network/utils.h"
 
 using namespace std;
 using namespace network;

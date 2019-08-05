@@ -1,7 +1,7 @@
 #include <cstring>
 #include <netinet/if_ether.h>
 
-#include "ArpPacket.h"
+#include "network/ArpPacket.h"
 
 using namespace network;
 
