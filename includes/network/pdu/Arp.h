@@ -2,8 +2,8 @@
 #define ARP_SENDER_ARP_H
 
 #include <cstdint>
-#include "../HwAddr.h"
-#include "../IpAddr.h"
+#include "../../../includes/network/HwAddr.h"
+#include "../../../includes/network/IpAddr.h"
 
 using byte=uint8_t;
 
