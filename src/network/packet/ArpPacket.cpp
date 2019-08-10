@@ -1,13 +1,13 @@
 #include <cstring>
 #include <netinet/if_ether.h>
 
-#include "network/ArpPacket.h"
+#include "network/packet/ArpPacket.h"
 
 namespace network {
     byte *ArpPacket::to_bytes() const {
-        byte *bytes = new byte[size];
-        byte *eth = ether.to_bytes();
-        byte *arp = this->arp.to_bytes();
+        bytes bytes = new byte[size];
+        bytes eth = ether.to_bytes();
+        bytes arp = this->arp.to_bytes();
 
         std::memcpy(bytes, eth, Ether::size);
         std::memcpy(bytes + Ether::size, arp, Arp::size);
