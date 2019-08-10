@@ -4,11 +4,13 @@
 #include <string>
 
 using byte=uint8_t;
+using bytes=std::vector<byte>;
 
 namespace network {
     class IpAddr {
     public:
         static const int size = 4;
+    protected:
         byte addr[size] {};
     public:
         IpAddr() = default;
@@ -17,6 +19,7 @@ namespace network {
         explicit IpAddr(uint32_t ip);
         explicit IpAddr(const std::string &ip) noexcept(false);
     public:
+        bytes to_bytes() const;
         std::string to_string() const;
         void parse_string(const std::string &ip) noexcept(false);
     public:

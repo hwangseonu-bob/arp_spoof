@@ -1,10 +1,13 @@
 #pragma once
 
 #include <cstdint>
+#include <vector>
+
 #include "network/HwAddr.h"
 #include "network/IpAddr.h"
 
 using byte=uint8_t;
+using bytes=std::vector<byte>;
 
 namespace network {
     class Arp {
@@ -28,6 +31,6 @@ namespace network {
         explicit Arp(u_short ht, u_short pt, byte hs, byte ps, u_short oc,
                 const HwAddr& smac, const IpAddr& sip, const HwAddr& tmac, const IpAddr& tip);
     public:
-        byte* to_bytes() const;
+        bytes to_bytes() const;
     };
 }

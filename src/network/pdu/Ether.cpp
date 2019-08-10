@@ -15,12 +15,16 @@ namespace network {
         this->type = type;
     }
 
-    byte *Ether::to_bytes() const {
-        byte *bytes = new byte[size];
-        std::memcpy(bytes, dst.addr, HwAddr::size);
-        std::memcpy(bytes + HwAddr::size, src.addr, HwAddr::size);
-        bytes[HwAddr::size * 2] = byte((type & 0xFF00) >> 8);
-        bytes[HwAddr::size * 2 + 1] = byte(type & 0x00FF);
-        return bytes;
+    bytes Ether::to_bytes() const {
+        bytes result;
+
+        bytes dmac = dst.to_bytes();
+        bytes smac = src.to_bytes();
+
+        result.insert(result.end(), dmac.begin(), dmac.end());
+        result.insert(result.end(), smac.begin(), smac.end());
+        result.push_back(byte((type & 0xFF00) >> 8));
+        result.push_back(byte(type & 0x00FF));
+        return result;
     }
 }

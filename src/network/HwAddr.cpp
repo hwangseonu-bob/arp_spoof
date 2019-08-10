@@ -35,6 +35,12 @@ namespace network {
         parse_string(mac);
         return *this;
     }
+
+    bytes HwAddr::to_bytes() const {
+        bytes result;
+        for (byte b : addr) result.push_back(b);
+        return result;
+    }
 }
 
 std::ostream &operator<<(std::ostream &o, const network::HwAddr &addr) {

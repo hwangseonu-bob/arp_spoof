@@ -1,10 +1,14 @@
 #pragma once
 
 #include <cstdint>
+#include <vector>
+
 #include "network/pdu/Ether.h"
 #include "network/pdu/Arp.h"
 
 using byte=uint8_t;
+using bytes=std::vector<byte>;
+
 
 namespace network {
     class ArpPacket {
@@ -22,10 +26,6 @@ namespace network {
         explicit ArpPacket(u_short opcode, const HwAddr &sender_mac, const IpAddr &sender_ip, const HwAddr &target_mac,
                            const IpAddr &target_ip);
     public:
-        explicit operator byte *() const {
-            return to_bytes();
-        }
-
-        byte *to_bytes() const;
+        bytes to_bytes() const;
     };
 }

@@ -2,9 +2,12 @@
 
 #include <cstdint>
 #include <ostream>
+#include <vector>
+
 #include "network/HwAddr.h"
 
 using byte=uint8_t;
+using bytes=std::vector<byte>;
 
 namespace network {
     class Ether {
@@ -19,6 +22,6 @@ namespace network {
         explicit Ether(const byte pk[size]);
         explicit Ether(const HwAddr& dst, const HwAddr& src, u_short type);
     public:
-        byte* to_bytes() const;
+        bytes to_bytes() const;
     };
 }

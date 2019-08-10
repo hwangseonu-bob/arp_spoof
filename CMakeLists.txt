@@ -8,19 +8,19 @@ include(FindPCAP.cmake)
 set(SOURCE_LIST
         src/main.cpp
 
-        src/network/ArpPacket.cpp
-        src/network/HwAddr.cpp
-        src/network/IpAddr.cpp
-        src/network/utils.cpp
+        includes/network/packet/ArpPacket.h
         includes/network/pdu/Arp.h
         includes/network/pdu/Ether.h
+        includes/network/HwAddr.h
+        includes/network/IpAddr.h
+        includes/network/utils.h
 
-        src/network/ArpPacket.cpp
+        src/network/packet/ArpPacket.cpp
+        src/network/pdu/Arp.cpp
+        src/network/pdu/Ether.cpp
         src/network/HwAddr.cpp
         src/network/IpAddr.cpp
         src/network/utils.cpp
-        src/network/pdu/Arp.cpp
-        src/network/pdu/Ether.cpp
         )
 
 add_executable(arp_spoof ${SOURCE_LIST})

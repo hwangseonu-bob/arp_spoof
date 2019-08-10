@@ -37,6 +37,12 @@ namespace network {
         return std::string(str);
     }
 
+    bytes IpAddr::to_bytes() const {
+        bytes result;
+        for (byte b : addr) result.push_back(b);
+        return result;
+    }
+
     IpAddr &IpAddr::operator=(const std::string &ip) {
         parse_string(ip);
         return *this;

@@ -2,6 +2,7 @@
 #include <iostream>
 #include <netinet/in.h>
 #include <net/if_arp.h>
+#include <variant>
 
 #include "network/pdu/Arp.h"
 
@@ -45,20 +46,30 @@ namespace network {
         target_ip = tip;
     }
 
-    byte *Arp::to_bytes() const {
-        byte *bytes = new byte[size];
-        auto *hd = new arphdr;
-        hd->ar_hrd = htons(hw_type);
-        hd->ar_pro = htons(pt_type);
-        hd->ar_hln = hw_size;
-        hd->ar_pln = pt_size;
-        hd->ar_op = htons(opcode);
-        std::memcpy(bytes, hd, sizeof(arphdr));
-        std::memcpy(bytes + 8, sender_mac.addr, HwAddr::size);
-        std::memcpy(bytes + 14, sender_ip.addr, IpAddr::size);
-        std::memcpy(bytes + 18, target_mac.addr, HwAddr::size);
-        std::memcpy(bytes + 24, target_ip.addr, IpAddr::size);
-        delete (hd);
-        return bytes;
+    bytes Arp::to_bytes() const {
+        bytes result;
+
+        auto *arp_hd = new arphdr;
+        arp_hd->ar_hrd = htons(hw_type);
+        arp_hd->ar_pro = htons(pt_type);
+        arp_hd->ar_hln = hw_size;
+        arp_hd->ar_pln = pt_size;
+        arp_hd->ar_op = htons(opcode);
+
+        byte tmp[sizeof(arphdr)];
+        memcpy(tmp, arp_hd, sizeof(arphdr));
+        delete (arp_hd);
+        for(byte b : tmp) result.push_back(b);
+
+        bytes smac = sender_mac.to_bytes();
+        result.insert(result.end(), smac.begin(), smac.end());
+        bytes sip = sender_ip.to_bytes();
+        result.insert(result.end(), sip.begin(), sip.end());
+        bytes tmac = target_mac.to_bytes();
+        result.insert(result.end(), tmac.begin(), tmac.end());
+        bytes tip = target_ip.to_bytes();
+        result.insert(result.end(), tip.begin(), tip.end());
+        return result;
     }
+
 }
