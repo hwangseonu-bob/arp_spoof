@@ -23,6 +23,7 @@ namespace network {
         bytes to_bytes() const;
     public:
         bool operator==(const HwAddr& other);
+        bool operator!=(const HwAddr& other);
     };
 
     std::ostream& operator<<(std::ostream& o, const HwAddr& mac);

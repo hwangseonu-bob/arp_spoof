@@ -36,6 +36,10 @@ namespace network {
         return other.addr == addr;
     }
 
+    bool HwAddr::operator!=(const HwAddr& other) {
+        return other.addr != addr;
+    }
+
     std::ostream &operator<<(std::ostream &o, const HwAddr &mac) {
         return o << mac.to_string();
     }

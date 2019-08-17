@@ -85,7 +85,8 @@ namespace network {
                 if (res == 0) continue;
                 ArpPacket reply(packet);
 
-                if (reply.eth.type == ETHERTYPE_ARP and reply.arp.opcode == ARPOP_REPLY and reply.arp.sender_ip == tip) {
+                if (reply.eth.type == ETHERTYPE_ARP and
+                    reply.arp.opcode == ARPOP_REPLY and reply.arp.sender_ip == tip and reply.arp.sender_mac != smac) {
                     delete[](packet);
                     return reply.arp.sender_mac;
                 }

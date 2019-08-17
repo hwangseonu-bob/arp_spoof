@@ -12,7 +12,7 @@ namespace network {
         tmp = ip.to_bytes();
         result.insert(result.end(), tmp.begin(), tmp.end());
 
-//        result.insert(result.end(), data.begin(), data.end());
+        result.insert(result.end(), data.begin(), data.end());
 
         return result;
     }
