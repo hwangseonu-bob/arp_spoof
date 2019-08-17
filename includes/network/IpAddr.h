@@ -6,21 +6,29 @@
 #include "../types.h"
 
 namespace network {
-    class HwAddr {
+    class IpAddr {
     public:
-        const static size_t size = 6;
+        const static size_t size = 4;
     protected:
         bytes addr;
     public:
-        HwAddr() : addr(bytes(size)) {}
-        HwAddr(const HwAddr &mac) : addr(bytes(mac.addr.begin(), mac.addr.begin() + size)) {}
-        explicit HwAddr(bytes mac) : addr(bytes(mac.begin(), mac.begin() + size)) {}
-        explicit HwAddr(const bytes *mac) : addr(bytes(mac, mac + size)) {}
-        explicit HwAddr(const std::string& mac);
+        IpAddr() : addr(bytes(size)) {}
+
+        IpAddr(const IpAddr &ip) : addr(bytes(ip.addr.begin(), ip.addr.begin() + size)) {}
+
+        explicit IpAddr(uint32_t ip) : IpAddr(reinterpret_cast<byte *>(&ip)) {}
+
+        explicit IpAddr(const bytes& ip) : addr(bytes(ip.begin(), ip.begin() + size)) {}
+
+        explicit IpAddr(const byte *ip) : addr(bytes(ip, ip + size)) {}
+
+        explicit IpAddr(const std::string &ip);
     public:
         std::string to_string() const;
         bytes to_bytes() const;
+    public:
+        bool operator==(const IpAddr& other);
     };
 
-    std::ostream& operator<<(std::ostream& o, const HwAddr& mac);
+    std::ostream &operator<<(std::ostream &o, const IpAddr &mac);
 }

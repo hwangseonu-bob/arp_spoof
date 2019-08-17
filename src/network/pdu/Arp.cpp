@@ -1,23 +1,37 @@
-#include "../../../includes/network/pdu/Ether.h"
+#include "../../../includes/network/pdu/Arp.h"
 
 namespace network {
-    Ether *Ether::clone() const {
-        return new Ether(*this);
-    }
 
-    size_t Ether::header_length() const {
-        return 14;
-    }
-
-    bytes Ether::to_bytes() const {
+    bytes Arp::to_bytes() const {
         bytes result;
         bytes tmp;
-        tmp = dst.to_bytes();
+
+        result.push_back(hw_type >> 8);
+        result.push_back(hw_type & 0x00FF);
+        result.push_back(pt_type >> 8);
+        result.push_back(pt_type & 0x00FF);
+        result.push_back(hw_size);
+        result.push_back(pt_size);
+        result.push_back(opcode >> 8);
+        result.push_back(opcode & 0x00FF);
+
+        tmp = sender_mac.to_bytes();
         result.insert(result.end(), tmp.begin(), tmp.end());
-        tmp = src.to_bytes();
+        tmp = sender_ip.to_bytes();
         result.insert(result.end(), tmp.begin(), tmp.end());
-        result[HwAddr::size*2] = type >> 8;
-        result[HwAddr::size*2 + 1] = type & 0x00FF;
+        tmp = target_mac.to_bytes();
+        result.insert(result.end(), tmp.begin(), tmp.end());
+        tmp = target_ip.to_bytes();
+        result.insert(result.end(), tmp.begin(), tmp.end());
+
         return result;
+    }
+
+    size_t Arp::size() const {
+        return header_size();
+    }
+
+    size_t Arp::header_size() const {
+        return 28;
     }
 }

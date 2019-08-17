@@ -1,8 +1,14 @@
-//
-// Created by hwangseonu on 19. 8. 15..
-//
+#pragma once
 
-#ifndef ARP_SPOOF_TUILES_H
-#define ARP_SPOOF_TUILES_H
+#include <string>
+#include <pcap.h>
 
-#endif //ARP_SPOOF_TUILES_H
+#include "HwAddr.h"
+#include "IpAddr.h"
+
+namespace network {
+    pcap *open_dev(const char *dev);
+    network::HwAddr get_dev_mac(const char *dev);
+    network::IpAddr get_dev_ip(const char *dev);
+    network::HwAddr get_target_mac(const char *dev, const IpAddr &tip) noexcept(false);
+}
